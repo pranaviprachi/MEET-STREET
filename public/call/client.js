@@ -10,10 +10,11 @@ let messages = document.querySelector(".messages");
 let joinChatRoom = document.querySelector("#joinChatRoom");
 // Create a new video tag to show our video
 const myVideo = document.createElement('video');
+myVideo.muted = true;
 
-let peers = {},
-    currentPeer = [];
-
+let peers = {}, 
+    currentPeer = [],
+    conn ={};
 let myPeerId;
 let myVideoStream;
 
@@ -25,7 +26,7 @@ socket.emit('new-user', userName);
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443'
+    port: '3000'
 });
 
 var getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia;
@@ -80,16 +81,11 @@ peer.on('open', id => {
     
     myPeerId = id;
     socket.emit('join-room', ROOM_ID, id, userName);
+   
     //this will send an event to our server when we join room
 
 })
 
-socket.on('user-disconnected', userId => {
-    //user disconnected 
-    if (peers[userId]) peers[userId].close();
-    // console.log('user ID fetch Disconnect: ' + userId);
-
-});
 
 // This runs when someone joins our room
 const connectToNewUser = (userId, stream) => {
@@ -115,11 +111,21 @@ const addVideoStream = (video, stream) => {
     //this help to show and append or add video to user side
     video.srcObject = stream;
     video.controls = true;
+    video.autoplay=true;
     video.addEventListener('loadedmetadata', () => {
         video.play();
     })
     videoGrid.append(video);
 }
+
+
+socket.on('user-disconnected', userId => {
+    //user disconnected 
+    if (peers[userId]) peers[userId].close();
+    
+    // console.log('user ID fetch Disconnect: ' + userId);
+
+});
 
 
 socket.on('user-joined', userName => {
