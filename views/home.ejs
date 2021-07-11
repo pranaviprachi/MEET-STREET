@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="home.css">
+
+    <script>
+        const user = "<%=user.nickname%>";
+        if(window) {
+           localStorage.setItem('name', `${user}`);
+        }
+        const picture = "<%=user.picture%>";
+    </script>
+ 
+</head>
+<body>
+
+<div class="blurred-box">
+    <!--  you dont need the user-login-box html  -->
+    <!--  for demo purposes only and its shit  -->
+    <div class="user-login-box">
+      <span class="user-icon">
+       <img src="<%=user.picture%>" alt="picture">
+      </span>
+      <div class="user-name" id="user_name">
+       
+        <script type="text/javascript">
+          document.write(user);
+        </script>
+      </div>
+
+      <a href="/call" class="user-password">Call Now</a>
+      <a href="/chat" class="user-password">Chat Now</a>
+      <a href="/logout" class="user-password">Logout</a>
+      
+     
+      
+    </div>
+    
+  </div>
+  
+</body>
+</html>

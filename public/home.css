@@ -1,0 +1,193 @@
+.page {
+  padding: 40px;
+   
+}
+.dv{
+  height:300px;
+  width:300px;
+  background-color:black;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#splash {
+  background: #cc1f2f;
+  background-repeat: repeat-y;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  animation: splash 3s ease-in;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+}
+
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%,0);
+}
+
+#loader:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -8px;
+  bottom: -170px;
+  width: 3px;
+  background: #fff;
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+  height: 200px;
+}
+
+#loader:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: 8px;
+  bottom: -190px;
+  width: 3px;
+  background: #000;
+  background: linear-gradient(to bottom, rgba(0,0,0,.2) 0%, rgba(0,0,0,.2) 50%, rgba(0,0,0,0) 100%);
+  height: 200px;
+}
+
+#splash .anim {
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  width: 100px;
+  transform: translate(-50%,100%);
+  animation: loader 4s linear;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@keyframes loader {
+  0% {
+    transform: translate(-50%,110%);
+  }
+  30% {
+    transform: translate(-50%,50%);
+  }
+  100% {
+    transform: translate(-50%,0%);
+  }
+}
+
+@keyframes splash {
+  0% {
+    transform: translate(0%,0%);
+  }
+  50% {
+    transform: translate(0%,0%);
+  }
+  100% {
+    transform: translate(0%,-100%);
+  }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+   }
+   
+   html{
+       width: 100vw;
+       height: 100vh;
+   }
+   
+   /* CSS which you need for blurred box */
+   body{
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: top;
+    background-image:url(https://mcdn.wallpapersafari.com/medium/73/89/O0jJPU.png);
+    width: 100%;
+    height: 100%;
+    font-family: Arial, Helvetica;
+    letter-spacing: 0.02em;
+     font-weight: 400;
+    -webkit-font-smoothing: antialiased; 
+   }
+   
+   .blurred-box{
+     position: relative;
+     width: 250px;
+     /* height: 350px; */
+     top: calc(50% - 175px);
+     left: calc(50% - 125px);
+     background: inherit;
+     border-radius: 2px;
+     overflow: hidden;
+     /* min-height: 350px; */
+   }
+
+   a:hover{
+    transition: all .2s ease-in-out; 
+      transform: scale(1.1); 
+   }
+   
+   .blurred-box:after{
+    content: '';
+    width: 300px;
+    height: 300px;
+    background: inherit; 
+    /* position: absolute; */
+    left: -25px;
+    right: 0;
+    top: -25px;  
+    bottom: 0;
+    box-shadow: inset 0 0 0 200px rgba(255,255,255,0.05);
+    filter: blur(10px);
+    min-height: 350px;
+   }
+   
+   
+   /* Form which you dont need */
+   .user-login-box{
+     
+     margin-top: 50px;
+     text-align: center;
+     z-index: 1;
+   }
+   .user-login-box > *{
+     display: inline-block;
+     width: 200px;
+   }
+   
+   .user-icon{
+     width: 100px;
+     height: 100px;
+     position: relative;
+     border-radius: 50%;
+     background-size: contain;
+     
+   }
+   
+   .user-name{
+     margin-top: 15px;
+     margin-bottom: 15px;
+     color: white;
+   }
+   
+  .user-password{
+    font-size: 25px;
+    padding: 1px 0px;
+    text-decoration: blink;
+    border: 2px solid black;
+    color: black;
+    font-weight: bolder;
+    background-color: #94949e;
+    border-radius: 40px;
+    margin: 8px;
+   }
+   
+   
