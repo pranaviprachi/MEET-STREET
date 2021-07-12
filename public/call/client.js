@@ -110,8 +110,8 @@ const connectToNewUser = (userId, stream,socketId) => {
 const addVideoStream = (video, stream) => {
     //this help to show and append or add video to user side
     video.srcObject = stream;
-    video.controls = true;
-    video.autoplay=true;
+    // video.controls = true;
+    // video.autoplay=true;
     video.id = stream.id
     video.addEventListener('loadedmetadata', () => {
         video.play();

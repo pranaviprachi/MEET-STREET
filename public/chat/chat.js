@@ -38,8 +38,7 @@ invite.addEventListener("click", (e) => {
 });
 
 end.addEventListener("click", (e) => {
-
-  window.location.href = "/";
+         window.location.href = "/";
 });
 
 call.addEventListener("click", (e) => {
@@ -52,14 +51,12 @@ call.addEventListener("click", (e) => {
 
   socket.emit('message', `${msg}`);
   
-  setTimeout( ()=>{
   window.location.href = `/call/${room}`;
-},0);
+
 
 });
 
 //message event
-
 
 
 send.addEventListener("click", (e) => {
