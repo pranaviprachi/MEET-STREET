@@ -6,14 +6,7 @@
     <title>HOMEPAGE</title>
     <link rel="stylesheet" href="home.css">
      <script>
-        let user;
-       
-         let userName = prompt("Enter your username");
-         let nickname = "<%=user.nickname%>";
-         
-          if (!userName?.trim()) user = nickname;
-           else user = userName; 
-           
+        let user = "<%=user.nickname%>";
            const picture = "<%=user.picture%>";
         
      </script>
@@ -22,8 +15,6 @@
 <body>
 
 <div class="blurred-box">
-    <!--  you dont need the user-login-box html  -->
-    <!--  for demo purposes only and its shit  -->
     <div class="user-login-box">
       <span class="user-icon">
        <img src="<%=user.picture%>" alt="picture">
