@@ -80,11 +80,11 @@ getUserMedia({
 peer.on('open', id => {
     
     myPeerId = id;
-    socket.emit('join-room', ROOM_ID, id, userName);
+    socket.emit('join-room', ROOM_ID, id, userName, socket.id);
    
     //this will send an event to our server when we join room
 
-})
+});
 
 
 // This runs when someone joins our room
@@ -102,7 +102,6 @@ const connectToNewUser = (userId, stream) => {
         video.remove()
     })
 
-    peers[userId] = call;
     currentPeer.push(call.peerConnection);
 
 }
@@ -112,6 +111,7 @@ const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.controls = true;
     video.autoplay=true;
+    video.id = stream.id; 
     video.addEventListener('loadedmetadata', () => {
         video.play();
     })
@@ -119,14 +119,12 @@ const addVideoStream = (video, stream) => {
 }
 
 
-socket.on('user-disconnected', userId => {
+socket.on('user-disconnected', (streamId,userId) => {
     //user disconnected 
-    if (peers[userId]) peers[userId].close();
-    
-    // console.log('user ID fetch Disconnect: ' + userId);
+     document.getElementById(streamId).remove();
+     if (peers[userId]) peers[userId].close();
 
 });
-
 
 socket.on('user-joined', userName => {
     
@@ -141,6 +139,7 @@ socket.on('user-left', userName => {
 
 //code for disconnect from client
 const disconnectNow = () => {
+    socket.emit("disconnect_me",myVideoStream.id); 
     window.location = "/";
 }
 

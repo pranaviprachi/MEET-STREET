@@ -51,8 +51,10 @@ call.addEventListener("click", (e) => {
        </div>`;
 
   socket.emit('message', `${msg}`);
-
+  
+  setTimeout( ()=>{
   window.location.href = `/call/${room}`;
+},0);
 
 });
 

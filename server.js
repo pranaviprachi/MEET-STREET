@@ -98,10 +98,10 @@ io.on('connection', socket => {
     });
 
     // Communicate the disconnection
-    socket.on('disconnect', () => {
+    socket.on('disconnect_me', (stream_id) => {
       var i = userSocketId.indexOf(socket.id);
       userSocketId.splice(i, 1);
-      socket.broadcast.to(roomId).emit('user-disconnected', userRoomId[i]);
+      socket.broadcast.to(roomId).emit('user-disconnected', stream_id,  userRoomId[i]); 
       socket.to(roomId).emit('user-left', users[socket.id])
       //update array
       userRoomId.splice(i, 1);
