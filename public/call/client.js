@@ -1,33 +1,46 @@
 const socket = io('/'); //socket connection
-//to stream our own video in the room, // Find the Video-Box element
-const videoGrid = document.getElementById('video-box');
-const inviteButton = document.querySelector("#inviteButton");
-const crossChat = document.querySelector("#cross_icon");
-let isVisible = document.getElementById("chatWindow");
-let text = document.querySelector("#chat_message");
+
+
 let send = document.getElementById("sendBtn");
+let text = document.querySelector("#chat_message");
 let messages = document.querySelector(".messages");
+let isVisible = document.getElementById("chatWindow");
+const videoGrid = document.getElementById('video-box');
+const crossChat = document.querySelector("#cross_icon");
 let joinChatRoom = document.querySelector("#joinChatRoom");
+const inviteButton = document.querySelector("#inviteButton");
+
+
+
 // Create a new video tag to show our video
 const myVideo = document.createElement('video');
 myVideo.muted = true;
 
 let peers = {}, 
-    currentPeer = [],
-    conn ={};
+    currentPeer = [];
+   
 let myPeerId;
 let myVideoStream;
 
 let userName = prompt('Type Your Name');
-
 socket.emit('new-user', userName);
-
 
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
     port: '443'
 });
+
+//the user id gets automatically generated using peer js
+// When we first open the app, have us join a room
+peer.on('open', id => {
+    
+    myPeerId = id;
+    socket.emit('join-room', ROOM_ID, id, userName);
+   
+    //this will send an event to our server when we join room
+})
+
 
 var getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia;
 
@@ -60,7 +73,6 @@ getUserMedia({
         //   Handle when the call finishes
         call.on('close', function () {
             video.remove();
-            console.log("vid removed");
         });
     });
 
@@ -73,17 +85,6 @@ getUserMedia({
     })
 
 });
-
-//the user id gets automatically generated using peer js
-// When we first open the app, have us join a room
-peer.on('open', id => {
-    
-    myPeerId = id;
-    socket.emit('join-room', ROOM_ID, id, userName);
-   
-    //this will send an event to our server when we join room
-
-})
 
 
 // This runs when someone joins our room
@@ -118,10 +119,13 @@ const addVideoStream = (video, stream) => {
     videoGrid.append(video);
 }
 
+socket.on('disconnectNow', (streamId) => {
+    document.getElementById(streamId).remove();
+   
+});
 
 socket.on('user-disconnected', (userId) => {
     //user disconnected 
-    console.log(peers[userId]);
     if (peers[userId]) peers[userId].close();
     
 });
@@ -131,12 +135,6 @@ const disconnectNow = () => {
     socket.emit("disconnect_now", myVideoStream.id);
     window.location = "/";
 }
-
-socket.on('disconnectNow', (streamId) => {
-     document.getElementById(streamId).remove();
-    
-});
-
 
 socket.on('user-joined', userName => {
     
@@ -148,8 +146,6 @@ socket.on('user-left', userName => {
 
     messages.innerHTML += `<li class="join-info">${userName} has left</li>`;
 })
-
-
 
 //to Mute or Unmute Option method
 const toggleAudio = () => {
@@ -193,14 +189,14 @@ const setVideoButton = () => {
     const html = `<i class="fas fa-video"></i>
                 <span>Stop Video</span>`;
     document.querySelector('.videoBtn').innerHTML = html;
-    console.log("Cammera Mode ON");
+   
 }
 
 const unsetVideoButton = () => {
     const html = `<i class="fas fa-video-slash" style="color:red;"></i>
                 <span>Start Video</span>`;
     document.querySelector('.videoBtn').innerHTML = html;
-    console.log("Cammera Mode OFF");
+   
 }
 
 inviteButton.addEventListener("click", (e) => {
@@ -329,7 +325,6 @@ const unChangeHandLogo = () => {
     const html = `<i class="far fa-hand-paper" style="color:red;"></i>
                 <span>Raised</span>`;
     document.querySelector('.raisedHand').innerHTML = html;
-    console.log("chnage")
     changeHandLogo();
 }
 
@@ -338,7 +333,6 @@ const changeHandLogo = () => {
         const html = `<i class="far fa-hand-paper" style="color:"white"></i>
                 <span>Hand</span>`;
         document.querySelector('.raisedHand').innerHTML = html;
-        console.log("chge");
 
     }, 3000);
 
@@ -353,7 +347,6 @@ joinChatRoom.addEventListener('click',(e) => {
          </div>`;
   
     socket.emit('message', `${msg}`);
-    console.log("f");
     window.location.href =`/chat/${room}`;
 })
 
