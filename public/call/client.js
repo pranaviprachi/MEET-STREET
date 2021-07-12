@@ -26,7 +26,7 @@ socket.emit('new-user', userName);
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443'
+    port: '3000'
 });
 
 var getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia;
@@ -65,12 +65,11 @@ getUserMedia({
     });
 
     // If a new user connects
-    socket.on('user-connected', (userId) => {
+    socket.on('user-connected', (userId,socketId) => {
         //userconnected so we now ready to share 
-        // console.log('user ID fetch connection: '+ userId); //video stream
         setTimeout(() => {
-            connectToNewUser(userId, stream)
-        }, 2000); //calling user
+            connectToNewUser(userId, stream,socketId)
+        }, 1000); //calling user
     })
 
 });
@@ -80,15 +79,15 @@ getUserMedia({
 peer.on('open', id => {
     
     myPeerId = id;
-    socket.emit('join-room', ROOM_ID, id, userName, socket.id);
+    socket.emit('join-room', ROOM_ID, id, userName);
    
     //this will send an event to our server when we join room
 
-});
+})
 
 
 // This runs when someone joins our room
-const connectToNewUser = (userId, stream) => {
+const connectToNewUser = (userId, stream,socketId) => {
 
     let call = peer.call(userId, stream); //we call new user and send our video stream to the user
 
@@ -102,6 +101,7 @@ const connectToNewUser = (userId, stream) => {
         video.remove()
     })
 
+    peers[userId] = call;
     currentPeer.push(call.peerConnection);
 
 }
@@ -111,7 +111,7 @@ const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.controls = true;
     video.autoplay=true;
-    video.id = stream.id; 
+    video.id = stream.id
     video.addEventListener('loadedmetadata', () => {
         video.play();
     })
@@ -119,12 +119,28 @@ const addVideoStream = (video, stream) => {
 }
 
 
-socket.on('user-disconnected', (streamId,userId) => {
+socket.on('user-disconnected', (userId) => {
     //user disconnected 
-     document.getElementById(streamId).remove();
-     if (peers[userId]) peers[userId].close();
-
+    console.log(peers[userId]);
+    if (peers[userId]) peers[userId].close();
+    
 });
+window.onbeforeunload = function(){
+    disconnectNow();
+    return "";
+};
+
+//code for disconnect from client
+const disconnectNow = () => {
+    socket.emit("disconnect_now", myVideoStream.id);
+    window.location = "/";
+}
+
+socket.on('disconnectNow', (streamId) => {
+     document.getElementById(streamId).remove();
+    
+});
+
 
 socket.on('user-joined', userName => {
     
@@ -137,11 +153,7 @@ socket.on('user-left', userName => {
     messages.innerHTML += `<li class="join-info">${userName} has left</li>`;
 })
 
-//code for disconnect from client
-const disconnectNow = () => {
-    socket.emit("disconnect_me",myVideoStream.id); 
-    window.location = "/";
-}
+
 
 //to Mute or Unmute Option method
 const toggleAudio = () => {
