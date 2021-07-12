@@ -125,10 +125,6 @@ socket.on('user-disconnected', (userId) => {
     if (peers[userId]) peers[userId].close();
     
 });
-window.onbeforeunload = function(){
-    disconnectNow();
-    return "";
-};
 
 //code for disconnect from client
 const disconnectNow = () => {
