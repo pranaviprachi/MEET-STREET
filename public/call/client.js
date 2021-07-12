@@ -1,6 +1,5 @@
 const socket = io('/'); //socket connection
 
-
 let send = document.getElementById("sendBtn");
 let text = document.querySelector("#chat_message");
 let messages = document.querySelector(".messages");
@@ -21,15 +20,42 @@ let peers = {},
    
 let myPeerId;
 let myVideoStream;
-
-let userName = prompt('Type Your Name');
+let userName =  prompt("Enter your username");
 socket.emit('new-user', userName);
 
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443'
+    port: '3000',
+    config: { 'iceServers': [
+        { url: 'stun:stun01.sipphone.com' },
+        { url: 'stun:stun.ekiga.net' },
+      { url: 'stun:stunserver.org' },
+      { url: 'stun:stun.softjoys.com' },
+      { url: 'stun:stun.voiparound.com' },
+      { url: 'stun:stun.voipbuster.com' },
+      { url: 'stun:stun.voipstunt.com' },
+      { url: 'stun:stun.voxgratia.org' },
+      { url: 'stun:stun.xten.com' },
+      {
+        url: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com'
+      },
+      {
+        url: 'turn:192.158.29.39:3478?transport=tcp',
+        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        username: '28224511:1379330808'
+        }
+      ]
+       },
+      
+      debug: 3
+     
 });
+
+
+
 
 //the user id gets automatically generated using peer js
 // When we first open the app, have us join a room
@@ -88,7 +114,7 @@ getUserMedia({
 
 
 // This runs when someone joins our room
-const connectToNewUser = (userId, stream,socketId) => {
+const connectToNewUser = (userId, stream) => {
 
     let call = peer.call(userId, stream); //we call new user and send our video stream to the user
 
@@ -113,6 +139,8 @@ const addVideoStream = (video, stream) => {
     video.controls = true;
     video.autoplay=true;
     video.id = stream.id
+    
+
     video.addEventListener('loadedmetadata', () => {
         video.play();
     })
@@ -120,6 +148,7 @@ const addVideoStream = (video, stream) => {
 }
 
 socket.on('disconnectNow', (streamId) => {
+    
     document.getElementById(streamId).remove();
    
 });
@@ -339,17 +368,25 @@ const changeHandLogo = () => {
 }
 
 joinChatRoom.addEventListener('click',(e) => {
-    let room = prompt("Enter Chat Room No");
-    if (!room?.trim()) room = Math.random().toString(36).substring(10);
+   let room = Math.random().toString(36).substring(10);
     let msg = `
          <div style="background-color:#e4e8ec8">
            <a href="/chat/${room}">Click this link to join chat room</a>
          </div>`;
   
     socket.emit('message', `${msg}`);
-    window.location.href =`/chat/${room}`;
+    disconnect_and_join_chat(room);
+
 })
 
+//code for disconnect from client
+const disconnect_and_join_chat = (room) => {
+    socket.emit("disconnect_now", myVideoStream.id);
+
+    setTimeout(() => {
+        window.location = `/chat/${room}`;
+    }, 1000); 
+}
 
 
 // This is the client-side code that handles interacting with the server and other users.

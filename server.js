@@ -99,6 +99,7 @@ io.on('connection', socket => {
 
     // Communicate the disconnection
     socket.on('disconnect', () => {
+      
       var i = userSocketId.indexOf(socket.id);
       userSocketId.splice(i, 1);
       socket.broadcast.to(roomId).emit('user-disconnected',userRoomId[i]);
@@ -106,12 +107,12 @@ io.on('connection', socket => {
       //update array
       userRoomId.splice(i, 1);
     });
+
     socket.on('disconnect_now', (streamId) => {
-     
-      socket.broadcast.to(roomId).emit('disconnectNow',streamId);
-      socket.to(roomId).emit('user-left', users[socket.id])
+           socket.broadcast.to(roomId).emit('disconnectNow',streamId);
       
     });
+   
   });
 
   //Handling Chat Room

@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOMEPAGE</title>
     <link rel="stylesheet" href="home.css">
-
-    <script>
-        const user = "<%=user.nickname%>";
-        if(window) {
-           localStorage.setItem('name', `${user}`);
-        }
-        const picture = "<%=user.picture%>";
-    </script>
- 
+     <script>
+        let user;
+       
+         let userName = prompt("Enter your username");
+         let nickname = "<%=user.nickname%>";
+         
+          if (!userName?.trim()) user = nickname;
+           else user = userName; 
+           
+           const picture = "<%=user.picture%>";
+        
+     </script>
+     
 </head>
 <body>
 

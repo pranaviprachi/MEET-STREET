@@ -7,8 +7,7 @@ let text = document.querySelector("#chat_message");
 let send = document.getElementById("send");
 let chat_history = document.querySelector("#chatMessage");
 
-
-let userName = prompt('Type Your Name');
+let userName = prompt("Enter your username");
 socket.emit('join-chat-room', RoomId, userName);
 
 
@@ -42,8 +41,7 @@ end.addEventListener("click", (e) => {
 });
 
 call.addEventListener("click", (e) => {
-  let room = prompt("Enter Room No");
-  if (!room?.trim()) room = Math.random().toString(36).substring(10);
+  let room = Math.random().toString(36).substring(10);
   let msg = `
        <div class="welcomeUser" style="background-color:#e4e8ec8">
          <a href="/call/${room}">Click this link to join video call</a>

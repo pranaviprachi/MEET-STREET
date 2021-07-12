@@ -6,7 +6,6 @@ var router = express.Router();
 router.get('/', (req, res) => {
 
    if (req.oidc.isAuthenticated()) {
-
       res.render('home', {
          user: req.oidc.user
       });
