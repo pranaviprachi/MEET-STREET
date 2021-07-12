@@ -26,7 +26,7 @@ socket.emit('new-user', userName);
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '3000',
+    port: '443',
     config: { 'iceServers': [
         { url: 'stun:stun01.sipphone.com' },
         { url: 'stun:stun.ekiga.net' },
