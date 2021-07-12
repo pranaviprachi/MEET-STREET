@@ -27,7 +27,7 @@ body {
 }
 
 video {
-  height: 270px;
+  height: 280px;
   border-radius: 10px;
   margin: 0.5rem;
   width: 400px;
@@ -41,7 +41,7 @@ video {
   flex: 0.9;
   height: 100vh;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-  overflow: auto;
+  overflow: hidden;
   justify-content: center;
   align-items: center;
   position: relative;
